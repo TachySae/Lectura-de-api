@@ -18,13 +18,13 @@ const COLORES = {
 
 let pilotos = [];
 let equipos = new Map();   
-
+// Recibe la id de equipo permitiendo su respectivo color, si no encuentra id dejara el color por defecto
 function colorDeEquipo(id) {
   if (id && !COLORES[id]) console.log("Equipo sin color definido:", id);
   return COLORES[id] || COLOR_POR_DEFECTO;
 }
 
-
+// Guardas a los pilotos que estan en la API permitiendo que la pagina funcione si algo falla muestra error
 async function cargarPilotos() {
   const estado = document.getElementById("estado");
   try {
@@ -45,7 +45,7 @@ async function cargarPilotos() {
   }
 }
 
-
+// agrupa a los pilotos por equipo
 function armarEquipos() {
   equipos = new Map();
   pilotos.forEach(p => {
@@ -59,12 +59,12 @@ function armarEquipos() {
   });
 }
 
-
+// ordena a los equipos por puntos del campeonato
 function equiposPorPuntos() {
   return [...equipos.values()].sort((a, b) => b.puntos - a.puntos);
 }
 
-
+// Permite tener botones que guarda a los equipos 
 function crearBoton(texto, id) {
   const boton = document.createElement("button");
   boton.type = "button";
@@ -74,7 +74,7 @@ function crearBoton(texto, id) {
   boton.addEventListener("click", () => elegirEquipo(id));
   return boton;
 }
-
+// Permite que se pueda filtrar por equipo 
 function llenarFiltro() {
   const contenedor = document.getElementById("filtro");
   contenedor.innerHTML = "";
@@ -84,14 +84,14 @@ function llenarFiltro() {
     .forEach(e => contenedor.appendChild(crearBoton(e.nombre, e.id)));
   marcarActivo("");
 }
-
+// Permite mantener el boton con el equipo seleccionado
 function marcarActivo(id) {
   document.querySelectorAll("#filtro .btn").forEach(b => {
     b.classList.toggle("activo", b.dataset.id === id);
   });
 }
 
-
+// muestra el equipo elegido con sus colores
 function elegirEquipo(id) {
   cambiarFondo(id);
   marcarActivo(id);
@@ -101,7 +101,7 @@ function elegirEquipo(id) {
   window.scrollTo({ top: 0 });
 }
 
-
+// reinicia la lista de audio 
 function limpiarLista() {
   detenerAudio();
   const contenedor = document.getElementById("lista");
@@ -112,7 +112,7 @@ function limpiarLista() {
   return contenedor;
 }
 
-
+// Muestra el podio principal y la main page
 function mostrarPrincipal() {
   const cont = limpiarLista();
   const orden = [1, 0, 2];
@@ -159,7 +159,7 @@ function mostrarPrincipal() {
     b.addEventListener("click", () => elegirEquipo(b.dataset.id)));
 }
 
-
+// Permite mostrar la carta del equipo con su lugar en el campeonato de constructores
 function mostrarEscuderia(id) {
   const cont = limpiarLista();
   const e = equipos.get(id);
@@ -203,7 +203,7 @@ function alternarAudio(codigo, boton) {
   detenerAudio();
   reproducir(CARPETA_AUDIO + codigo + ".mp3", boton, true);
 }
-
+// Permite que el boton radio check reproduzca el audio del piloto
 function reproducir(ruta, boton, permitirRespaldo) {
   const audio = new Audio(ruta);
   audioActual = audio;
@@ -223,7 +223,7 @@ function reproducir(ruta, boton, permitirRespaldo) {
   });
   audio.play().catch(error => console.warn("No se pudo reproducir:", error.message));
 }
-
+// Detiene el audio en reproduccion
 function detenerAudio() {
   if (audioActual) audioActual.pause();
   if (botonActual) {
@@ -237,7 +237,7 @@ function detenerAudio() {
 
 const capas = [document.getElementById("fondoA"), document.getElementById("fondoB")];
 let capaActiva = -1;   
-
+// Precarga el fondo para permitir la animacion
 function cambiarFondo(id) {
   const ruta = "Fondos/" + (id || "main") + ".jpg";
   const img = new Image();
