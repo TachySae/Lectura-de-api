@@ -106,7 +106,6 @@ function limpiarLista() {
   detenerAudio();
   const contenedor = document.getElementById("lista");
   contenedor.innerHTML = "";
-  // reinicia la animación de entrada
   contenedor.style.animation = "none";
   contenedor.offsetHeight;
   contenedor.style.animation = "";
